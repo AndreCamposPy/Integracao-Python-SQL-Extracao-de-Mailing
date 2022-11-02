@@ -1,0 +1,81 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import pyodbc
+import time
+
+
+# In[2]:
+
+
+dados_conexao = (
+"Driver={SQL Server};"
+"Server=********;"
+"Database=********;"
+"UID=********;"
+"PWD=********;"
+)
+conexao = pyodbc.connect(dados_conexao)
+
+
+# In[3]:
+
+
+cursor = conexao.cursor()
+comando ='''
+SELECT                                                                  
+    DISTINCT(f.FONE),                                             
+    T.DEVEDOR_ID,                                                          
+    NOME,                                                               
+    CPF,                                                                
+    FAIXA,                                                              
+
+********
+ORDER BY 6 DESC, 5
+'''
+
+
+# In[8]:
+
+
+id_ac_retornos = [6369, 6351, 6475, 6365, 6373, 6473, 6349, 6367, 6350, None]
+execucao = cursor.execute(comando)
+tabela = [[row.DEVEDOR_ID, row.FONE[0:2], row.FONE[2:], row.NOME] for row in execucao if row.ACAO_ID in id_ac_retornos]
+
+
+# In[9]:
+
+
+#criando arquivo de mailing csv
+nome_arquivo = 'MAILING_OPERACAO_TESTE'
+extensao = 'csv'
+#data = time.strftime("%d/%m/%Y_%H:%M")
+data = time.strftime("%d%m%Y_%H%M")
+caminho_arquivo = f'C:\\Users\\andre\\Documents\\ImportFiles\\{nome_arquivo}_{data}.{extensao}'
+arquivo = open(caminho_arquivo, 'w')
+
+
+# In[10]:
+
+
+#colocando os dados no arquivo csv delimitado por vírgula
+for i in range(0, len(tabela)):
+    arquivo.write(f'{tabela[i][0]};{tabela[i][1]};{tabela[i][2]};{tabela[i][3]}\n')
+
+
+# In[11]:
+
+
+arquivo.close()
+
+
+# In[12]:
+
+
+with open(caminho_arquivo,'r', newline = '\r\n') as arquivo:
+    [print(linha) for linha in arquivo]
+
+
