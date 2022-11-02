@@ -1,3 +1,1 @@
-Olá! Esse projeto ensina vocô a usar o GIT
-
-Isso é uma alteração!!!!
+OlÃ¡! Esse projeto contÃ©m o script para gerar uma IntegraÃ§Ã£o Python-SQL e ExtraÃ§Ã£o de Mailing
